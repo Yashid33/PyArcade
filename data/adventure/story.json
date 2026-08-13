@@ -1,0 +1,363 @@
+{
+  "nodes": [
+    {
+      "id": "start",
+      "title": "The Dark Forest",
+      "text": "You awaken in a dark forest. Ancient trees tower above you. A path splits in two directions.",
+      "choices": [
+        {"text": "Take the left path (toward the light)", "next": "glade"},
+        {"text": "Take the right path (into the darkness)", "next": "cave_entrance"},
+        {"text": "Search the area", "next": "search_start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["stick"]
+    },
+    {
+      "id": "search_start",
+      "title": "Searching the Area",
+      "text": "You find a sturdy stick and a worn map. The map shows a castle to the north and a village to the east.",
+      "choices": [
+        {"text": "Head toward the castle", "next": "castle_gate"},
+        {"text": "Head toward the village", "next": "village"},
+        {"text": "Take the left path", "next": "glade"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["stick", "map"]
+    },
+    {
+      "id": "glade",
+      "title": "The Sunlit Glade",
+      "text": "A beautiful glade opens up. Wildflowers bloom everywhere. An old hermit sits by a fire.",
+      "choices": [
+        {"text": "Talk to the hermit", "next": "hermit"},
+        {"text": "Follow the stream", "next": "river_bridge"},
+        {"text": "Return to the forest", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["flowers"]
+    },
+    {
+      "id": "hermit",
+      "title": "The Hermit's Advice",
+      "text": "The hermit peers at you. 'Seeking the crystal? It lies in the Dragon's Keep, past the bridge. Take this charm.' He hands you a glowing charm.",
+      "choices": [
+        {"text": "Head to the bridge", "next": "river_bridge"},
+        {"text": "Go to the Dragon's Keep", "next": "dragon_keep"},
+        {"text": "Thank the hermit and leave", "next": "glade"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["charm"]
+    },
+    {
+      "id": "cave_entrance",
+      "title": "The Cave Entrance",
+      "text": "A dark cave mouth yawns before you. Strange sounds echo from within. Bones litter the ground.",
+      "choices": [
+        {"text": "Enter the cave", "next": "cave_inside"},
+        {"text": "Look at the bones", "next": "bones"},
+        {"text": "Go back", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["bone"]
+    },
+    {
+      "id": "bones",
+      "title": "Among the Bones",
+      "text": "You find a rusty sword among the bones. It still has some edge left.",
+      "choices": [
+        {"text": "Take the sword and enter the cave", "next": "cave_inside"},
+        {"text": "Go back to the forest", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["rusty_sword"]
+    },
+    {
+      "id": "cave_inside",
+      "title": "Inside the Cave",
+      "text": "The cave is damp and cold. You hear dripping water. Two tunnels branch off.",
+      "choices": [
+        {"text": "Take the left tunnel (wider)", "next": "underground_lake"},
+        {"text": "Take the right tunnel (narrower)", "next": "treasure_room"},
+        {"text": "Go back to the entrance", "next": "cave_entrance"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "underground_lake",
+      "title": "Underground Lake",
+      "text": "A vast underground lake stretches before you. The water glows faintly blue. A small boat floats at the edge.",
+      "choices": [
+        {"text": "Cross the lake", "next": "crystal_cave"},
+        {"text": "Drink from the lake", "next": "lake_drink"},
+        {"text": "Go back", "next": "cave_inside"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["boat"]
+    },
+    {
+      "id": "lake_drink",
+      "title": "Enchanted Waters",
+      "text": "The water tastes sweet. You feel stronger and more perceptive. You notice a hidden passage.",
+      "choices": [
+        {"text": "Enter the hidden passage", "next": "crystal_cave"},
+        {"text": "Cross the lake by boat", "next": "crystal_cave"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["enchanted_strength"]
+    },
+    {
+      "id": "treasure_room",
+      "title": "The Treasure Room",
+      "text": "Piles of gold and gems fill the room. But a stone guardian blocks the exit. It has a riddle carved on it.",
+      "choices": [
+        {"text": "Solve the riddle (you need intelligence)", "next": "treasure_success"},
+        {"text": "Try to sneak past", "next": "treasure_fail"},
+        {"text": "Go back", "next": "cave_inside"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "treasure_success",
+      "title": "Treasure Claimed",
+      "text": "You solve the riddle! 'What has keys but no locks?' — A keyboard! The guardian steps aside. You grab a golden amulet.",
+      "choices": [
+        {"text": "Head to the Dragon's Keep", "next": "dragon_keep"},
+        {"text": "Return to the forest", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["golden_amulet"]
+    },
+    {
+      "id": "treasure_fail",
+      "title": "Guardian Attacks",
+      "text": "The guardian comes to life! Without the right answer, you must flee. You barely escape with your life.",
+      "choices": [
+        {"text": "Run back to the cave", "next": "cave_inside"},
+        {"text": "Escape to the forest", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "crystal_cave",
+      "title": "The Crystal Cave",
+      "text": "Crystals of every color light up the walls. In the center, a pedestal holds a brilliant crystal.",
+      "choices": [
+        {"text": "Take the crystal", "next": "ending_crystal"},
+        {"text": "Leave it and explore further", "next": "dragon_keep"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["crystal"]
+    },
+    {
+      "id": "river_bridge",
+      "title": "The River Bridge",
+      "text": "A rickety bridge spans a rushing river. On the other side, you see the Dragon's Keep. A troll guards the bridge.",
+      "choices": [
+        {"text": "Fight the troll", "next": "troll_fight"},
+        {"text": "Pay the toll (gold)", "next": "dragon_keep"},
+        {"text": "Swim across", "next": "river_swim"},
+        {"text": "Go back", "next": "glade"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "troll_fight",
+      "title": "Battle with the Troll",
+      "text": "The troll is massive! You fight bravely.",
+      "choices": [
+        {"text": "Use the rusty sword", "next": "dragon_keep", "requires_item": "rusty_sword"},
+        {"text": "Use the charm", "next": "dragon_keep", "requires_item": "charm"},
+        {"text": "You have no weapon... run!", "next": "glade"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "river_swim",
+      "title": "Crossing the River",
+      "text": "The current is strong! You barely make it across, soaking wet but alive.",
+      "choices": [
+        {"text": "Head to the Dragon's Keep", "next": "dragon_keep"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "village",
+      "title": "The Village",
+      "text": "A small village. Villagers eye you suspiciously. The innkeeper waves you over.",
+      "choices": [
+        {"text": "Talk to the innkeeper", "next": "innkeeper"},
+        {"text": "Visit the blacksmith", "next": "blacksmith"},
+        {"text": "Leave the village", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "innkeeper",
+      "title": "The Innkeeper's Tale",
+      "text": "'Ah, an adventurer! The dragon stole our village's sacred gem. Slay the dragon and you'll be a hero. Here, take this shield.'",
+      "choices": [
+        {"text": "Head to the Dragon's Keep", "next": "dragon_keep"},
+        {"text": "Visit the blacksmith first", "next": "blacksmith"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["shield"]
+    },
+    {
+      "id": "blacksmith",
+      "title": "The Blacksmith",
+      "text": "'I can forge you a proper weapon, but I need steel. Bring me steel from the castle armory.'",
+      "choices": [
+        {"text": "Go to the castle", "next": "castle_gate"},
+        {"text": "Head to the Dragon's Keep anyway", "next": "dragon_keep"},
+        {"text": "Go back to the village", "next": "village"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "castle_gate",
+      "title": "The Castle Gate",
+      "text": "The castle gates are locked. A guard demands a password.",
+      "choices": [
+        {"text": "Guess 'open sesame'", "next": "castle_inside"},
+        {"text": "Climb the wall", "next": "castle_wall"},
+        {"text": "Go back", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "castle_wall",
+      "title": "Climbing the Wall",
+      "text": "You climb the crumbling wall and drop into the courtyard. You find the armory!",
+      "choices": [
+        {"text": "Take steel and leave", "next": "blacksmith"},
+        {"text": "Explore the castle", "next": "castle_inside"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["steel"]
+    },
+    {
+      "id": "castle_inside",
+      "title": "Inside the Castle",
+      "text": "The castle is magnificent. Portraits line the halls. You find a hidden room with a magical sword!",
+      "choices": [
+        {"text": "Take the magical sword", "next": "dragon_keep"},
+        {"text": "Leave the castle", "next": "start"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["magic_sword"]
+    },
+    {
+      "id": "dragon_keep",
+      "title": "The Dragon's Keep",
+      "text": "A massive dragon blocks the entrance to a treasure chamber. Its eyes glow red.",
+      "choices": [
+        {"text": "Fight the dragon with sword", "next": "ending_hero", "requires_item": "rusty_sword"},
+        {"text": "Fight the dragon with magic sword", "next": "ending_legendary", "requires_item": "magic_sword"},
+        {"text": "Use the charm", "next": "ending_peaceful", "requires_item": "charm"},
+        {"text": "Use the crystal", "next": "ending_crystal_power", "requires_item": "crystal"},
+        {"text": "Try to sneak past", "next": "dragon_sneak"},
+        {"text": "Offer gold amulet", "next": "ending_trade", "requires_item": "golden_amulet"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "dragon_sneak",
+      "title": "Sneaking Past",
+      "text": "The dragon spots you immediately! You barely escape with your life.",
+      "choices": [
+        {"text": "Flee back to the forest", "next": "start"},
+        {"text": "Try again with a weapon", "next": "dragon_keep"}
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "ending_hero",
+      "title": "Ending: The Hero",
+      "text": "You slay the dragon with the rusty sword! The villagers celebrate your return. You are named the Hero of the Forest. THE END",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "ending_legendary",
+      "title": "Ending: Legendary Warrior",
+      "text": "The magical sword cuts through dragon scales like butter. You become a legendary warrior, your name sung in taverns for generations. THE END",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "ending_peaceful",
+      "title": "Ending: The Peacemaker",
+      "text": "The charm soothes the dragon. It becomes your guardian, and you live together in the Keep as friends. THE END",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "ending_crystal_power",
+      "title": "Ending: Crystal Sorcerer",
+      "text": "The crystal's power forces the dragon to submit. You claim the dragon's hoard and become a powerful sorcerer. THE END",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "ending_trade",
+      "title": "Ending: The Diplomat",
+      "text": "The dragon accepts the amulet as tribute. It grants you three wishes. You wish for peace, wisdom, and adventure. THE END",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "ending_crystal",
+      "title": "Ending: The Crystal Bearer",
+      "text": "You take the crystal. Its power protects you forever. You become the Crystal Bearer, guardian of the underground realm. THE END",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    }
+  ]
+}
