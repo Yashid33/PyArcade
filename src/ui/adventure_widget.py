@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import re
+from pathlib import Path
+
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QComboBox,
@@ -42,8 +45,13 @@ class AdventureWidget(QWidget):
         self._game = AdventureGame(language="english")
         self._choice_buttons: list[QPushButton] = []
         self._ending_recorded = False
+        self._loading_story = True
 
         self._build_ui()
+        self._refresh_story_combo()
+        self._update_story_info_labels()
+
+        self._loading_story = False
         self._show_node()
 
     def _build_ui(self) -> None:
@@ -56,22 +64,45 @@ class AdventureWidget(QWidget):
         )
         layout.addWidget(title)
 
-        settings_row = QHBoxLayout()
+        controls_row = QHBoxLayout()
 
         self._lang_combo = QComboBox()
         self._lang_combo.addItem("English", "english")
         self._lang_combo.addItem("Persian", "persian")
-        self._lang_combo.setCurrentIndex(0)
         self._lang_combo.currentIndexChanged.connect(self._on_language_combo_changed)
 
-        settings_row.addWidget(QLabel("Language / Story:"))
-        settings_row.addWidget(self._lang_combo)
+        controls_row.addWidget(QLabel("Language:"))
+        controls_row.addWidget(self._lang_combo)
 
-        restart_btn = QPushButton("Restart Adventure")
+        self._story_combo = QComboBox()
+        self._story_combo.currentIndexChanged.connect(self._on_story_combo_changed)
+
+        controls_row.addWidget(QLabel("Story File:"))
+        controls_row.addWidget(self._story_combo, 1)
+
+        refresh_btn = QPushButton("Refresh")
+        refresh_btn.clicked.connect(self._on_refresh_clicked)
+        controls_row.addWidget(refresh_btn)
+
+        restart_btn = QPushButton("Restart")
         restart_btn.clicked.connect(self._on_restart_clicked)
-        settings_row.addWidget(restart_btn)
+        controls_row.addWidget(restart_btn)
 
-        layout.addLayout(settings_row)
+        layout.addLayout(controls_row)
+
+        info_row = QHBoxLayout()
+
+        self._story_name_label = QLabel("Story: Built-in / Default")
+        self._story_name_label.setStyleSheet("font-size: 12px; color: #a6e3a1;")
+
+        self._language_label = QLabel("Language: English")
+        self._language_label.setStyleSheet("font-size: 12px; color: #89b4fa;")
+
+        info_row.addWidget(self._story_name_label)
+        info_row.addStretch(1)
+        info_row.addWidget(self._language_label)
+
+        layout.addLayout(info_row)
 
         self._scene_label = QLabel("")
         self._scene_label.setStyleSheet(
@@ -96,16 +127,52 @@ class AdventureWidget(QWidget):
         layout.addWidget(back_btn)
 
     def _on_language_combo_changed(self, index: int) -> None:
-        """Change the active story language and restart the adventure."""
-        language = self._lang_combo.itemData(index)
+        """Handle language selection."""
+        if self._loading_story:
+            return
 
-        if not language:
-            language = self._lang_combo.currentText().lower()
+        language = self._current_language()
+
+        if self._game.story_name:
+            self._game.language = language
+            self._update_story_info_labels()
+            self._show_node()
+        else:
+            self._sound.play_click()
+            self._ending_recorded = False
+            self._game.set_language(language)
+            self._update_story_info_labels()
+            self._show_node()
+
+    def _on_story_combo_changed(self, index: int) -> None:
+        """Handle story file selection."""
+        if self._loading_story:
+            return
+
+        story_name = self._story_combo.currentData()
+        language = self._current_language()
 
         self._sound.play_click()
         self._ending_recorded = False
-        self._game.set_language(str(language))
+
+        if story_name:
+            inferred_language = self._infer_language_from_story_name(story_name)
+            if inferred_language:
+                language = inferred_language
+
+            self._game.set_story(str(story_name), language)
+        else:
+            self._game.set_language(language)
+
+        self._sync_language_combo_to(self._game.language)
+        self._update_story_info_labels()
         self._show_node()
+
+    def _on_refresh_clicked(self) -> None:
+        """Refresh the list of available story files."""
+        self._sound.play_click()
+        self._refresh_story_combo()
+        self._update_story_info_labels()
 
     def _on_restart_clicked(self) -> None:
         """Restart the current adventure."""
@@ -118,6 +185,89 @@ class AdventureWidget(QWidget):
         """Return to the main menu."""
         self._sound.play_click()
         self.back_to_menu.emit()
+
+    def _refresh_story_combo(self) -> None:
+        """Load story file names from data/adventure into the combo box."""
+        self._loading_story = True
+
+        current_story = self._game.story_name or ""
+
+        self._story_combo.clear()
+        self._story_combo.addItem("Built-in / Default", "")
+
+        try:
+            story_names = AdventureGame.get_available_story_names()
+        except AttributeError:
+            story_names = []
+
+        for name in story_names:
+            self._story_combo.addItem(f"{name}.json", name)
+
+        index = self._story_combo.findData(current_story)
+
+        if index >= 0:
+            self._story_combo.setCurrentIndex(index)
+        else:
+            self._story_combo.setCurrentIndex(0)
+
+        self._loading_story = False
+
+    def _sync_language_combo_to(self, language: str) -> None:
+        """Synchronize the language combo without triggering reloads."""
+        self._loading_story = True
+
+        index = self._lang_combo.findData(language)
+        if index >= 0:
+            self._lang_combo.setCurrentIndex(index)
+
+        self._loading_story = False
+
+    def _current_language(self) -> str:
+        """Return the currently selected language code."""
+        language = self._lang_combo.currentData()
+
+        if not language:
+            language = self._lang_combo.currentText().lower()
+
+        return str(language)
+
+    def _update_story_info_labels(self) -> None:
+        """Update visible story name and language labels."""
+        if self._game.story_name:
+            story_display = self._story_file_display(self._game.story_name)
+        else:
+            story_display = "Built-in / Default"
+
+        self._story_name_label.setText(f"Story: {story_display}")
+
+        if self._game.language in {"persian", "farsi", "fa"}:
+            language_display = "Persian"
+        else:
+            language_display = "English"
+
+        self._language_label.setText(f"Language: {language_display}")
+
+    def _story_file_display(self, story_name: str) -> str:
+        """Return a displayable JSON file name."""
+        name = Path(str(story_name)).name
+
+        if not name.lower().endswith(".json"):
+            name = f"{name}.json"
+
+        return name
+
+    def _infer_language_from_story_name(self, story_name: str) -> str | None:
+        """Infer language from the story file name if possible."""
+        parts = re.split(r"[^a-z0-9]+", str(story_name).lower())
+        parts = [part for part in parts if part]
+
+        if "persian" in parts or "farsi" in parts or "fa" in parts:
+            return "persian"
+
+        if "english" in parts or "en" in parts:
+            return "english"
+
+        return None
 
     def _show_node(self) -> None:
         """Display the current adventure node and its choices."""
@@ -136,6 +286,8 @@ class AdventureWidget(QWidget):
         self._inventory_label.setText(
             f"Inventory: {', '.join(inv) if inv else '(empty)'}"
         )
+
+        self._update_story_info_labels()
 
         for btn in self._choice_buttons:
             btn.deleteLater()

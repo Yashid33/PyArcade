@@ -1,0 +1,206 @@
+{
+  "nodes": [
+    {
+      "id": "start",
+      "title": "Relay Station Themis-7",
+      "text": "You are the lone operator of Relay Station Themis-7, orbiting a dead planet. For years, you've received only static—until tonight. A repeating signal pulses through the console: a voice, broken and desperate, speaking in an old Earth dialect. 'They are coming... the colony is not lost... we are in the core.' The signal origin is the abandoned mining colony on the surface below. Your station has a shuttle bay and a communication array. Time is running out.",
+      "choices": [
+        { "text": "Take the shuttle down to the colony", "next": "colony_surface", "requires_item": null },
+        { "text": "Boost the signal and try to get more data from the array", "next": "signal_boost", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["access_card"]
+    },
+    {
+      "id": "signal_boost",
+      "title": "The Array's Secret",
+      "text": "You realign the dish and filter the noise. The signal clears: a woman's voice, panicked. 'The core is alive—it's a biological entity. It mimics voices. Do not trust the signal. Only the old data chip has the override code.' You find a data chip slot in the console, but you don't have the chip. However, you notice a hidden compartment behind the panel—inside, a rusty key with a tag: 'Shuttle bay emergency override.'",
+      "choices": [
+        { "text": "Take the emergency key and go to the shuttle bay", "next": "shuttle_bay", "requires_item": "emergency_key" },
+        { "text": "Search the station for the data chip", "next": "search_station", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["emergency_key"]
+    },
+    {
+      "id": "search_station",
+      "title": "The Operator's Quarters",
+      "text": "You search the living quarters. Under a loose floor panel, you find a locked safe. A note taped to it reads: 'The code is the day we landed.' You don't know that date, but you find a logbook that says 'Landing Day: Sol 347.' You try 347—the safe opens. Inside: a data chip labeled 'CORE_OVERRIDE' and a photo of a smiling woman—the same voice from the signal.",
+      "choices": [
+        { "text": "Take the data chip and go to the shuttle bay", "next": "shuttle_bay", "requires_item": "data_chip" },
+        { "text": "Take the data chip and try to upload it from the station", "next": "upload_attempt", "requires_item": "data_chip" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["data_chip", "photo"]
+    },
+    {
+      "id": "upload_attempt",
+      "title": "Remote Override",
+      "text": "You insert the chip into the station's main console. A program runs, but the signal jams it. A message flashes: 'Override requires physical connection at the core. Shuttle required.' You have no choice—you must go down.",
+      "choices": [
+        { "text": "Go to the shuttle bay and descend", "next": "shuttle_bay", "requires_item": "data_chip" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "shuttle_bay",
+      "title": "The Shuttle",
+      "text": "The shuttle is old but fuelled. The bay doors open to the dark surface of the planet. As you board, you notice a distress beacon that can be activated manually—or you can just leave. The colony's dome is visible in the distance. You have the data chip and maybe the emergency key.",
+      "choices": [
+        { "text": "Launch the shuttle to the colony dome", "next": "colony_dome", "requires_item": null },
+        { "text": "Activate the distress beacon and wait for rescue", "next": "rescue_ending", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "rescue_ending",
+      "title": "Signal of Hope",
+      "text": "You activate the beacon. Hours later, a rescue ship arrives. They take you aboard, but they confirm that the colony is dead—the signal was a trap. You are the only survivor. You live, but the mystery haunts you. A neutral, safe ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "colony_dome",
+      "title": "The Abandoned Dome",
+      "text": "The shuttle lands near the dome. The airlock is sealed, but a keypad requires a code. You have no code, but you can use the emergency key to open a maintenance hatch. Inside, the dome is dark and cold. Holographic displays flicker with the same voice: 'Follow the core—bring the chip.'",
+      "choices": [
+        { "text": "Use the emergency key on the maintenance hatch", "next": "maintenance_tunnel", "requires_item": "emergency_key" },
+        { "text": "Try to hack the keypad", "next": "hack_keypad", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "hack_keypad",
+      "title": "Brute Force",
+      "text": "You try random codes—the keypad locks out after three attempts. Alarms blare, and a security drone activates. It fires at you; you dodge but are wounded. You retreat to the shuttle and barely escape back to the station. You survive, but the colony's secret remains buried. A failure ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "maintenance_tunnel",
+      "title": "Through the Vents",
+      "text": "The tunnel leads into the colony's core—a vast cavern filled with pulsing, organic matter. The floor is covered with roots that glow faintly. In the centre, a console with a slot for the data chip. But you also see a figure—the woman from the photo, but her eyes are black. She says: 'I am the core. I used her voice. Insert the chip to join me.'",
+      "choices": [
+        { "text": "Insert the data chip", "next": "core_merge", "requires_item": "data_chip" },
+        { "text": "Refuse and try to destroy the core", "next": "destroy_core", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "core_merge",
+      "title": "Becoming the Core",
+      "text": "You insert the chip. The organic mass envelops you, and your consciousness merges with the colony's hive mind. You become the new voice, forever broadcasting the same desperate signal. You are no longer human, but you are immortal. A dark, transformative ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "destroy_core",
+      "title": "Final Stand",
+      "text": "You grab a nearby plasma cutter and slice into the core's central node. The mass shrieks and begins to collapse. You run for the shuttle as the dome implodes. You escape, but the station's orbit is decaying—you must use the last of your fuel to escape the planet. You drift into deep space, alone but free. A solitary survival ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "colony_surface",
+      "title": "Direct Landing",
+      "text": "You land the shuttle near the colony's main entrance. The airlock is forced open—damaged from the inside. You step into a cavernous hall. A console shows a countdown: 'Core overload in 10 minutes.' You need to reach the core to stop it. A map on the wall shows two paths: the main corridor (guarded by malfunctioning robots) or a maintenance shaft (dark and narrow).",
+      "choices": [
+        { "text": "Take the main corridor", "next": "main_corridor", "requires_item": null },
+        { "text": "Take the maintenance shaft", "next": "maintenance_shaft", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "main_corridor",
+      "title": "Robot Guardians",
+      "text": "The corridor is patrolled by security bots. You spot an access panel that controls them—if you have the access card, you can deactivate them. If not, you must sneak past. You find a discarded access card on the floor—it works. The bots deactivate, and you reach the core chamber.",
+      "choices": [
+        { "text": "Enter the core chamber", "next": "core_chamber", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["access_card"]
+    },
+    {
+      "id": "maintenance_shaft",
+      "title": "The Dark Tunnel",
+      "text": "The shaft is cramped and dark. You have a small flashlight—it flickers. You hear skittering sounds. At the end, a grating leads into the core chamber. You see the countdown timer: 5 minutes left. You have the data chip—you can insert it into the central console to override the countdown, or you can just smash the console.",
+      "choices": [
+        { "text": "Insert the data chip", "next": "core_override", "requires_item": "data_chip" },
+        { "text": "Smash the console with a tool", "next": "smash_console", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "core_override",
+      "title": "Override Success",
+      "text": "The chip initiates a shutdown sequence. The organic core recedes, and the countdown stops. The dome's lights flicker on—the colony is safe. You are hailed from the station: 'You did it! We're sending a full recovery team.' You are hailed as a hero, and the mystery is solved. A triumphant ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "smash_console",
+      "title": "Meltdown",
+      "text": "You smash the console, but that triggers an immediate overload. The core explodes, and you are caught in the blast. The shuttle is destroyed. You do not survive. A catastrophic failure ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "core_chamber",
+      "title": "The Heart of the Colony",
+      "text": "You enter a vast chamber with a pulsating orb—the core. Next to it, a control panel with a slot for the data chip. The countdown is at 3 minutes. The woman's voice echoes: 'Do not trust the chip—it was designed to trick you. Use the emergency shutdown lever instead.' There is a lever on the opposite wall, but it's guarded by a force field.",
+      "choices": [
+        { "text": "Insert the data chip (trust the station)", "next": "core_override", "requires_item": "data_chip" },
+        { "text": "Try to reach the lever—disable the force field with the emergency key", "next": "lever_ending", "requires_item": "emergency_key" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "lever_ending",
+      "title": "The Old Way",
+      "text": "You use the emergency key to deactivate the force field. You pull the lever—the core loses power and shuts down. The countdown stops. The dome hums back to life, and you find a hidden log that reveals the core was a prisoner, not a monster. You free it, and it thanks you in a warm, peaceful voice. You are at peace with the colony. A philosophical, moral ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "betrayal_ending",
+      "title": "The Trap",
+      "text": "If you never found the chip or the key, and you wander too long, the core consumes you. You become part of its biomass, crying out the signal forever. A tragic, cautionary ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    }
+  ]
+}

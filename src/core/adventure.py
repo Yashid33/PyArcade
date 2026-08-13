@@ -16,6 +16,7 @@ class AdventureGame:
 
     Attributes:
         language: Active story language.
+        story_name: Active story file name, if one is selected.
         nodes: Dictionary of all story nodes.
         current_id: Current node ID.
         inventory: Items the player has collected.
@@ -27,18 +28,117 @@ class AdventureGame:
         self,
         story_path: Path | None = None,
         language: str = "english",
+        story_name: str | None = None,
     ) -> None:
         """Initialize the adventure game.
 
         Args:
             story_path: Optional path to a story JSON file.
-            language: Story language to use when no explicit path is given.
+            language: Story language used for built-in/default story lookup.
+            story_name: Optional story file name inside data/adventure.
         """
         self.language: str = language.strip().lower()
+        self.story_name: str | None = story_name
         self.nodes: dict[str, AdventureNode] = {}
         self.current_id: str = "start"
         self.inventory: list[str] = []
         self._steps: int = 0
+
+        if story_path is not None:
+            story_path = Path(story_path)
+
+        if story_name:
+            self._load_selected_story(self._story_path_for_name(story_name))
+        elif story_path is not None:
+            self._load_selected_story(story_path)
+        else:
+            self._load_selected_story(None)
+
+        if not self.nodes:
+            self._load_builtin_story()
+
+        self._ensure_current_id()
+
+    @classmethod
+    def stories_directory(cls) -> Path:
+        """Return the directory containing adventure story files."""
+        return (
+            Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "adventure"
+        )
+
+    @classmethod
+    def get_available_story_names(cls) -> list[str]:
+        """Return available story names from data/adventure/*.json."""
+        directory = cls.stories_directory()
+
+        if not directory.exists():
+            return []
+
+        names: list[str] = []
+
+        for path in sorted(directory.glob("*.json")):
+            if path.is_file():
+                names.append(path.stem)
+
+        return names
+
+    @classmethod
+    def _story_path_for_name(cls, story_name: str) -> Path:
+        """Convert a story name to a safe JSON file path."""
+        safe_name = Path(story_name).name
+
+        if safe_name.lower().endswith(".json"):
+            safe_name = safe_name[:-5]
+
+        return cls.stories_directory() / f"{safe_name}.json"
+
+    def set_story(
+        self,
+        story_name: str,
+        language: str | None = None,
+    ) -> AdventureNode:
+        """Load a story file by name and restart the adventure.
+
+        Args:
+            story_name: Story file name without directory path.
+            language: Optional language to activate alongside the story.
+
+        Returns:
+            The starting node of the newly loaded story.
+        """
+        if language:
+            self.language = language.strip().lower()
+
+        self.story_name = story_name
+        self.nodes.clear()
+
+        self._load_selected_story(self._story_path_for_name(story_name))
+
+        if not self.nodes:
+            self._load_builtin_story()
+
+        self._ensure_current_id()
+        return self.start()
+
+    def set_language(
+        self,
+        language: str,
+        story_path: Path | None = None,
+    ) -> AdventureNode:
+        """Switch the active story language and restart the adventure.
+
+        Args:
+            language: New language name.
+            story_path: Optional explicit story path for the new language.
+
+        Returns:
+            The starting node for the newly loaded story.
+        """
+        self.language = language.strip().lower()
+        self.story_name = None
+        self.nodes.clear()
 
         if story_path is not None:
             story_path = Path(story_path)
@@ -48,13 +148,15 @@ class AdventureGame:
         if not self.nodes:
             self._load_builtin_story()
 
+        self._ensure_current_id()
+        return self.start()
+
     def _default_story_path(self) -> Path:
-        """Return the default story path for the current language."""
-        base_dir = (
-            Path(__file__).resolve().parent.parent.parent
-            / "data"
-            / "adventure"
-        )
+        """Return the default story path for the current settings."""
+        if self.story_name:
+            return self._story_path_for_name(self.story_name)
+
+        base_dir = self.stories_directory()
 
         language_path = base_dir / f"story_{self.language}.json"
         if language_path.exists():
@@ -75,6 +177,7 @@ class AdventureGame:
 
         if not self.nodes and story_path is None and self.language != "english":
             fallback_path = self._default_story_path_for_language("english")
+
             if fallback_path.exists():
                 logger.warning(
                     "Story file for '%s' not found. Falling back to English story.",
@@ -85,9 +188,7 @@ class AdventureGame:
     def _default_story_path_for_language(self, language: str) -> Path:
         """Return the default story path for a specific language."""
         return (
-            Path(__file__).resolve().parent.parent.parent
-            / "data"
-            / "adventure"
+            self.stories_directory()
             / f"story_{language.lower()}.json"
         )
 
@@ -100,14 +201,31 @@ class AdventureGame:
             logger.error("Failed to load adventure story from %s: %s", path, exc)
             return
 
-        for node_data in data.get("nodes", []):
+        if isinstance(data, dict):
+            node_list = data.get("nodes", [])
+        elif isinstance(data, list):
+            node_list = data
+        else:
+            logger.error("Invalid adventure story format in %s", path)
+            return
+
+        for node_data in node_list:
             try:
                 node = AdventureNode.from_dict(node_data)
                 self.nodes[node.id] = node
-            except KeyError as exc:
+            except Exception as exc:
                 logger.error("Invalid adventure node in %s: %s", path, exc)
 
         logger.info("Loaded %d adventure nodes from %s", len(self.nodes), path)
+        self._ensure_current_id()
+
+    def _ensure_current_id(self) -> None:
+        """Ensure current_id points to a valid node."""
+        if not self.nodes:
+            return
+
+        if self.current_id not in self.nodes:
+            self.current_id = next(iter(self.nodes))
 
     def _load_builtin_story(self) -> None:
         """Load a built-in story when no valid story file is available."""
@@ -270,48 +388,28 @@ class AdventureGame:
             ]
         }
 
-    def set_language(
-        self,
-        language: str,
-        story_path: Path | None = None,
-    ) -> AdventureNode:
-        """Switch the active story language and restart the adventure.
-
-        Args:
-            language: New language name.
-            story_path: Optional explicit story path for the new language.
-
-        Returns:
-            The starting node for the newly loaded story.
-        """
-        self.language = language.strip().lower()
-        self.nodes.clear()
-
-        if story_path is not None:
-            story_path = Path(story_path)
-
-        self._load_selected_story(story_path)
-
-        if not self.nodes:
-            self._load_builtin_story()
-
-        return self.start()
-
     def start(self) -> AdventureNode:
         """Start the adventure from the beginning."""
         if not self.nodes:
             self._load_builtin_story()
 
-        self.current_id = "start"
+        if "start" in self.nodes:
+            self.current_id = "start"
+        elif self.nodes:
+            self.current_id = next(iter(self.nodes))
+
         self.inventory.clear()
         self._steps = 0
+
         return self.get_current_node()
 
     def get_current_node(self) -> AdventureNode:
         """Get the current story node."""
         node = self.nodes.get(self.current_id)
+
         if node is None:
             raise ValueError(f"Unknown node: {self.current_id}")
+
         return node
 
     def get_available_choices(self) -> list[Choice]:

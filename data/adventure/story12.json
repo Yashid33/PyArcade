@@ -1,0 +1,324 @@
+{
+  "nodes": [
+    {
+      "id": "start",
+      "title": "The King's Summons",
+      "text": "You are Sir Cedric, a knight of the realm. A royal messenger hands you a sealed scroll: 'Princess Elara has been taken by Baron Vex to his dark fortress beyond the Thornwall. Rescue her, and the kingdom is yours—fail, and you will lose your title.' The armory is open, the court mage awaits, and the stables are ready. You must choose your first step wisely.",
+      "choices": [
+        { "text": "Take the royal sword from the armory", "next": "armory", "requires_item": null },
+        { "text": "Visit the court mage for a magical charm", "next": "mage", "requires_item": null },
+        { "text": "Ride directly to the fortress without delay", "next": "direct_ride", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["sealed_scroll"]
+    },
+    {
+      "id": "armory",
+      "title": "The Royal Armory",
+      "text": "Rows of gleaming steel. You pick the King's own sword—a blade of folded star-iron, light and unbreakable. You also find a shield emblazoned with the royal crest. As you leave, a squire whispers: 'Baron Vex has a weakness—he fears the howl of the wolf. There is a wolf-cloak in the old hunting lodge.'",
+      "choices": [
+        { "text": "Take the wolf-cloak from the hunting lodge", "next": "lodge", "requires_item": null },
+        { "text": "Ride directly to the fortress with sword and shield", "next": "direct_ride", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["royal_sword", "royal_shield"]
+    },
+    {
+      "id": "lodge",
+      "title": "The Hunting Lodge",
+      "text": "The lodge is abandoned, dust covering old trophies. You find the wolf-cloak—grey and thick, still smelling of the beast. As you take it, you hear a growl—a real wolf, trapped in the cellar. It seems grateful when you free it. It follows you, a silent companion.",
+      "choices": [
+        { "text": "Ride to the fortress with the wolf-cloak and the wolf", "next": "fortress_gate", "requires_item": "wolf_cloak" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["wolf_cloak", "wolf_companion"]
+    },
+    {
+      "id": "mage",
+      "title": "The Court Mage",
+      "text": "The mage, a wizened woman with gleaming eyes, offers you a choice: 'Take this amulet of true-seeing—it will reveal hidden doors. Or take this vial of sleeping draught—it will put any guard to sleep for an hour. Choose one.'",
+      "choices": [
+        { "text": "Take the amulet of true-seeing", "next": "amulet_path", "requires_item": null },
+        { "text": "Take the sleeping draught", "next": "draught_path", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["amulet", "draught"]
+    },
+    {
+      "id": "amulet_path",
+      "title": "The Amulet's Glow",
+      "text": "With the amulet, you see the fortress's secret entrance—a tunnel beneath the moat. You ride to the fortress and find the tunnel entrance, but it's guarded by a giant serpent. The amulet reveals its weak point—the scale behind its head. You can strike there, or try to charm it with a gentle song (if you have the wolf-cloak, the serpent fears wolves).",
+      "choices": [
+        { "text": "Strike the serpent's weak point", "next": "serpent_fight", "requires_item": "amulet" },
+        { "text": "Use the wolf-cloak to frighten the serpent", "next": "serpent_flee", "requires_item": "wolf_cloak" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "serpent_fight",
+      "title": "Battle with the Serpent",
+      "text": "You leap and drive your sword into the serpent's weak scale. It roars and thrashes, but you finish it. The tunnel is open. You enter the fortress and find the princess's tower. But she is not alone—Baron Vex is there, waiting.",
+      "choices": [
+        { "text": "Confront Baron Vex", "next": "confront_vex", "requires_item": "royal_sword" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "serpent_flee",
+      "title": "The Serpent's Fear",
+      "text": "You wear the wolf-cloak and the serpent recoils, slithering into the moat. You pass through the tunnel and reach the princess's tower. She is there, but she does not look pleased to see you.",
+      "choices": [
+        { "text": "Speak with the princess", "next": "princess_talk", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "draught_path",
+      "title": "The Sleeping Draught",
+      "text": "You sneak into the fortress at night. Using the draught, you put the guards to sleep. You climb the tower and find the princess asleep—but you also find a letter on her desk: 'I chose to come here. I am not a captive.' Your mission is turned upside down.",
+      "choices": [
+        { "text": "Wake the princess and confront her", "next": "princess_confront", "requires_item": null },
+        { "text": "Leave quietly and report to the king that she is dead", "next": "lie_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": ["letter"]
+    },
+    {
+      "id": "direct_ride",
+      "title": "Ride to the Fortress",
+      "text": "You arrive at the fortress gates alone. The drawbridge is up, but a guard calls down: 'Baron Vex awaits you—enter if you dare.' They lower the bridge. You are led to the great hall, where the Baron sits with Elara at his side—she wears a crown. 'She is my queen now,' he says. You have a sword; you can attack, negotiate, or walk away.",
+      "choices": [
+        { "text": "Attack the Baron", "next": "attack_vex", "requires_item": "royal_sword" },
+        { "text": "Ask to speak with Elara alone", "next": "elara_private", "requires_item": null },
+        { "text": "Turn and leave the fortress", "next": "coward_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "attack_vex",
+      "title": "The Duel with Vex",
+      "text": "You draw your sword and charge. Vex is a master swordsman, but your royal blade is superior. You wound him—he falls. Elara screams, 'No!' She runs to him, weeping. 'You have killed the only man I loved,' she says. You have saved the kingdom but broken the princess's heart. You return to the king, who is pleased, but you carry guilt.",
+      "choices": [
+        { "text": "Accept the king's reward and live a hollow life", "next": "hollow_hero_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "hollow_hero_end",
+      "title": "The Hollow Hero",
+      "text": "You are celebrated, but the princess's words haunt you. You drink and duel aimlessly. Your courage became cruelty. A sad, tarnished ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "elara_private",
+      "title": "The Princess's Truth",
+      "text": "She agrees to speak with you alone. She says, 'I love Vex. He is not a tyrant—he is a reformer. The king is the real tyrant. I am here willingly. If you have courage, you will help us overthrow the king, not rescue me.' She offers you a choice: join her and Vex, or report back and betray her.",
+      "choices": [
+        { "text": "Join the rebellion and fight the king", "next": "rebel_end", "requires_item": null },
+        { "text": "Betray her to the king", "next": "betray_elara_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "rebel_end",
+      "title": "The True Knight",
+      "text": "You switch sides. With Vex and Elara, you lead a rebellion. Your courage is now directed at justice. The king falls, and a new era begins. You become a legend—not as a rescuer, but as a liberator. A triumphant, morally complex ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "betray_elara_end",
+      "title": "The King's Dog",
+      "text": "You report Elara's treason. The king attacks the fortress and kills Vex, imprisoning Elara. You are rewarded, but you are despised by the people. Your courage is now cowardice in disguise. You live in shame.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "coward_end",
+      "title": "The Deserting Knight",
+      "text": "You ride away from the fortress, back to the king. You claim the mission was impossible. He strips you of your title, and you become a wanderer. You never find courage again. A pathetic ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "princess_talk",
+      "title": "Elara's Voice",
+      "text": "She turns to you and says, 'I knew you would come, but I never wanted rescue. I am here to bring peace between our lands. Vex is my ally, not my captor. If you truly have courage, you will listen to my plan and help me convince the king.' You can agree, or you can forcibly take her.",
+      "choices": [
+        { "text": "Agree to her plan", "next": "peace_plan_end", "requires_item": null },
+        { "text": "Forcibly take her to the king", "next": "force_capture_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "peace_plan_end",
+      "title": "The Diplomat Knight",
+      "text": "You help Elara and Vex negotiate a treaty. The kingdom is united without bloodshed. Your courage was in listening, not fighting. You become a peacemaker, loved by all. A wise, noble ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "force_capture_end",
+      "title": "The Knight of Iron",
+      "text": "You grab Elara and drag her out of the fortress. She fights and curses you. You bring her to the king, who rewards you, but she is thrown in a dungeon. You are hailed as a hero, but you know you broke her spirit. A brutal, regretful ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "princess_confront",
+      "title": "Awakening",
+      "text": "You wake her. She is angry. 'You had no right,' she says. She explains her love for Vex and her hope for peace. You stand there, holding your sword. You must decide: uphold your oath to the king, or follow your heart and let her go.",
+      "choices": [
+        { "text": "Let her go and tell the king she is dead", "next": "lie_end", "requires_item": null },
+        { "text": "Help her and Vex escape to a new land", "next": "escape_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "lie_end",
+      "title": "The Lie That Saves",
+      "text": "You return to the king and say she died in the rescue attempt. You live with the lie, but she is free. You meet her in secret years later, and she thanks you. A quiet, secret-keeping ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "escape_end",
+      "title": "The Outlaw Knight",
+      "text": "You help her escape with Vex. They sail to a distant land, and you join them. You abandon your title and become a wanderer in exile. Your courage is now in loyalty to love, not to crown. A romantic, outcast ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "confront_vex",
+      "title": "Baron Vex's Throne Room",
+      "text": "You enter the throne room. Vex stands, sword drawn. Elara is beside him, holding his arm. 'She is my wife,' he says. 'And you are a fool.' You can fight him, try to reason, or call on your wolf companion (if you have it) to intimidate.",
+      "choices": [
+        { "text": "Fight Vex", "next": "duel_vex", "requires_item": "royal_sword" },
+        { "text": "Reason with him about peace", "next": "reason_vex", "requires_item": null },
+        { "text": "Set your wolf on him", "next": "wolf_attack", "requires_item": "wolf_companion" }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "duel_vex",
+      "title": "The Duel",
+      "text": "You clash swords. Vex is fierce, but your royal blade and shield give you an edge. You disarm him. Elara steps between you. 'Spare him, and I will go with you,' she says. If you agree, you take her back, but she is a shell of herself. If you kill him, she will never forgive you.",
+      "choices": [
+        { "text": "Spare Vex and take Elara", "next": "spare_end", "requires_item": null },
+        { "text": "Kill Vex", "next": "kill_vex_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "spare_end",
+      "title": "The Hollow Rescue",
+      "text": "You spare him. Elara comes with you, but she is silent and distant. You are celebrated, but you have taken a prisoner, not a princess. You live with her coldness. A hollow victory.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "kill_vex_end",
+      "title": "The Murderer Knight",
+      "text": "You run him through. Elara screams and attacks you with a dagger, wounding you. Guards take her away. You survive, but you are a murderer in her eyes. You are awarded, but you are haunted. A dark, victorious-but-lost ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "reason_vex",
+      "title": "Words Over Steel",
+      "text": "You speak of peace, of uniting the lands. Vex listens—he is tired of war. He offers a treaty: he will release Elara if the king agrees to reforms. You can take this offer to the king, or you can seize Elara and leave.",
+      "choices": [
+        { "text": "Take the treaty to the king", "next": "treaty_end", "requires_item": null },
+        { "text": "Seize Elara and flee", "next": "seize_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "treaty_end",
+      "title": "The Peacemaker",
+      "text": "You bring the treaty. The king agrees—he has no choice, as public opinion shifts. Elara is freed, and she thanks you. You become a diplomat. Your courage was in your words, not your sword. A wise ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "seize_end",
+      "title": "The Unwilling Capture",
+      "text": "You grab Elara and ride out. She fights you, but you are stronger. You bring her to the king, who is pleased but later you realise you have made an enemy of Vex, who wages war. You die in battle years later. A tragic ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "wolf_attack",
+      "title": "The Wolf's Howl",
+      "text": "You command your wolf to leap at Vex. It knocks him down, but does not kill him. Elara thanks you for showing mercy. She agrees to negotiate. You broker a peace with the wolf by your side. You return a hero, and the wolf becomes your companion for life. A warm, animal-bond ending.",
+      "choices": [],
+      "is_ending": true,
+      "requires_item": null,
+      "items_available": []
+    },
+    {
+      "id": "fortress_gate",
+      "title": "At the Gate with the Wolf",
+      "text": "The guards see the wolf and tremble. They open the gate. You walk in, and the wolf howls—it echoes through the fortress. Vex appears, pale. 'I surrender,' he says. 'Take the princess.' Elara steps forward, but she is not a captive. She and Vex explain the truth. You can now choose to hear their side.",
+      "choices": [
+        { "text": "Listen to their side", "next": "elara_private", "requires_item": null },
+        { "text": "Insist on taking her", "next": "force_capture_end", "requires_item": null }
+      ],
+      "is_ending": false,
+      "requires_item": null,
+      "items_available": []
+    }
+  ]
+}
